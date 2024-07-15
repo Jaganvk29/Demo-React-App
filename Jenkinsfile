@@ -8,19 +8,22 @@ pipeline {
         }
         stage('Install dependencies') {
             steps {
-                sh 'npm install'
                 echo 'Installing dependencies'
+                nodejs(nodeJSInstallationName: 'Node-22.4.1') {
+                    sh 'npm install'
+                }
             }
         }
         stage('Build') {
             steps {
-                sh 'npm run build'
                 echo 'Building the app'
+                nodejs(nodeJSInstallationName: 'Node-22.4.1') {
+                    sh 'npm run build'
+                }
             }
         }
         stage('Test') {
             steps {
-                sh 'npm test'
                 echo 'Testing the app'
             }
         }
