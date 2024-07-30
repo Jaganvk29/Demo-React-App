@@ -10,6 +10,7 @@ pipeline {
             steps {
                 echo 'Installing dependencies'
                 nodejs(nodeJSInstallationName: 'Node-22.4.1') {
+                    sh 'docker --version'
                     sh 'npm install'
                 }
             }
