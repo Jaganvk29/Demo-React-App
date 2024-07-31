@@ -15,6 +15,7 @@ pipeline {
                     sh 'docker --version'
                     sh 'docker info'
                     sh 'echo "Building Docker Image ..."'
+                    sh 'docker build -t jenkinstestreact .'
  
                 }
             }
