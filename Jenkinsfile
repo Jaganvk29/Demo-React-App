@@ -1,40 +1,44 @@
 pipeline {
-    agent { dockerfile true }
+    agent any
+
     stages {
-        stage('Checkout') {
+        stage('Clone repository') {
             steps {
+                /* Let's make sure we have the repository cloned to our workspace */
                 checkout scm
             }
         }
-        stage('Install dependencies') {
+
+        stage('Build image') {
             steps {
-                echo 'Installing dependencies'
-                nodejs(nodeJSInstallationName: 'Node-22.4.1') {
-                    sh 'docker --version'
-                    sh 'npm install'
+                script {
+                    /* This builds the actual image; synonymous to
+                     * docker build on the command line */
+                    app = docker.build("getintodevops/hellonode")
                 }
             }
         }
-        stage('Build') {
+
+        stage('Test image') {
             steps {
-                echo 'Building the app'
-                nodejs(nodeJSInstallationName: 'Node-22.4.1') {
-                    sh 'npm run build'
+                script {
+                    /* Ideally, we would run a test framework against our image.
+                     * For this example, we're using a Volkswagen-type approach ;-) */
+                    app.inside {
+                        sh 'echo "Tests passed"'
+                    }
                 }
             }
         }
-        stage('Test') {
+
+        stage('Push image') {
             steps {
-                echo 'Testing the app'
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploying the app'
-                // Add your deployment steps here
+                echo 'Image Pushed ...'
+                }
             }
         }
     }
+
     post {
         always {
             echo 'Cleaning up...'
