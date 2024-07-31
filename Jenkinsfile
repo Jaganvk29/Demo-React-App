@@ -33,7 +33,12 @@ pipeline {
 
         stage('Push image') {
             steps {
-                echo 'Image Pushed ...'
+               script {
+                    /* Ideally, we would run a test framework against our image.
+                     * For this example, we're using a Volkswagen-type approach ;-) */
+                    app.inside {
+                        sh 'echo "Docker Image Pushed ..."'
+                    }
                 }
             }
         }
